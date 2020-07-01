@@ -8,9 +8,9 @@ const baseUrl = 'https://api.mapme.com/graphql'
 const xApiKey = '[editorGeneratedKeyGoesHere]'
 const storyId = '[storyId]'
 const categoriesMapping = {
-    Category1: 'cat1-Id',
-    Category2: 'cat2-Id',
-    Category3: 'cat3-Id',
+    "Category1-name": 'mapme-ID-of-category-1',
+    "Category2-name": 'mapme-ID-of-category-2',
+    "Category3-name": 'mapme-ID-of-category-3',
 }
 
 /**
