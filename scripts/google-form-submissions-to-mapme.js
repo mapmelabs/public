@@ -28,10 +28,10 @@ function onFormSubmit(event) {
         const title = itemResponse.getItem().getTitle()
         const response = itemResponse.getResponse()
         switch (title) {
-            case 'Location name':
+            case 'Name':
                 name = response
                 break
-            case 'Location Address':
+            case 'Address':
                 address = response
                 break
             case 'Description':
