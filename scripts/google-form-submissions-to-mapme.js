@@ -47,7 +47,7 @@ function onFormSubmit(event) {
                 break
         }
     }
-    const body = createRequest(name, address, description, categories, websiteURL)
+    const body = createRequest(name, address, description, categories, websiteURL)  
     Logger.log(body)
     const method = 'post'
     getMapMeApi(method, body)
@@ -70,7 +70,7 @@ function createRequest(name, address, description, categories, websiteURL) {
           address: "${address}"
           description: "${description}"
           categoryIds: [${categories}]
-          callToAction: {url:"${websiteURL}",title:"More Info"}                        
+          callToAction: {url:"${websiteURL}",title:"More Info"}    /** if no website URL in the form, remove this line: */
         }){
             id
             address
