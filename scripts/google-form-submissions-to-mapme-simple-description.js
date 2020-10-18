@@ -70,7 +70,7 @@ function createRequest(name, address, description, categories, websiteURL) {
           address: "${address}"
           description: "${description}"
           categoryIds: [${categories}]
-          callToAction: {url:"${websiteURL}",title:"More Info"}    /** if no website URL in the form, remove this line: */
+          callToAction: {url:"${websiteURL}",title:"More Info"}
         }){
             id
             address
