@@ -73,23 +73,6 @@ function createRequest(name, address, description, categories, websiteURL) {
           callToAction: {url:"${websiteURL}",title:"More Info"}
         }){
             id
-            address
-            externalId
-            description
-            mapView{
-              center {
-                lat
-                lng
-              }
-              bearing
-              pitch
-              zoom
-            }
-            callToAction {
-              target
-              url
-              title
-            }
           }
         }`,
     })
