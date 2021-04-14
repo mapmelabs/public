@@ -12,7 +12,7 @@ const categoriesMapping = {
     "Category2-name": 'mapme-ID-of-category-2',
     "Category3-name": 'mapme-ID-of-category-3',
 }
-
+const publishRequired = false
 /**
  * On form submit event trigger function
  * @param {object} event - event of form submit
@@ -58,6 +58,11 @@ function onFormSubmit(event) {
     Logger.log(body)
     const method = 'post'
     getMapMeApi(method, body)
+if (publishRequired) {
+      console.log('publishing story')
+      const body = publishStoryMapRequest()
+      getMapMeApi(method, body)
+    }	
 }
 /**
  * Create request body
