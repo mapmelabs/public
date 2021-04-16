@@ -84,6 +84,18 @@ function createRequest(name, address, description, categories, websiteURL) {
     })
     return graphql
 }
+
+function publishStoryMapRequest() {
+    var graphql = JSON.stringify({
+        query: `
+mutation publishStoryMap {
+  publishStoryMap(storyId: "${storyId}"){storyId, publishId}
+}
+`,
+    })
+    return graphql
+}
+
 /**
  * Base request to MapMe API
  * @param {string} fullRequest  Full request URL to API
