@@ -26,7 +26,10 @@ function onFormSubmit(event) {
         const itemResponse = itemResponses[j]
         //   for(let itemResponse in itemResponses){
         const title = itemResponse.getItem().getTitle()
-        const response = itemResponse.getResponse()
+        let response = itemResponse.getResponse()
+        if (typeof response === 'string') {
+          response = response.replace(/\"/g, '\\\"')  
+        }
         switch (title) {
             case 'Name':
                 name = response
