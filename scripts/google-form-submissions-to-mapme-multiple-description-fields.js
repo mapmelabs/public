@@ -13,6 +13,7 @@ const categoriesMapping = {
     "Category3-name": 'mapme-ID-of-category-3',
 }
 const publishRequired = false
+const categoryId = ''
 /**
  * On form submit event trigger function
  * @param {object} event - event of form submit
@@ -21,7 +22,7 @@ function onFormSubmit(event) {
     const formResponse = event['response']
     const itemResponses = formResponse.getItemResponses()
     let name, address, description, categoriesNames, websiteURL, description2, description3
-    let categories = Array()
+    let categories = categoryId ? "${categoryId}" : Array()
     for (let j = 0; j < itemResponses.length; j++) {
         const itemResponse = itemResponses[j]
         //   for(let itemResponse in itemResponses){
