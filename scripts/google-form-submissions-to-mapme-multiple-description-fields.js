@@ -84,7 +84,7 @@ function createRequest(name, address, description, categories, websiteURL) {
           storyId: "${storyId}"
           name: "${name}"
           address: "${address}"
-          description: "${description}"
+          description: """${description}"""
           categoryIds: [${categories}]
           callToAction: {url:"${websiteURL}",title:"More Info"}                        
         }){
