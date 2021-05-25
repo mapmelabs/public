@@ -79,7 +79,7 @@ function createRequest(name, address, description, categories, websiteURL) {
           address: "${address}"
           description: """${description}"""
           categoryIds: [${categories}]
-          callToAction: {url:"${websiteURL}",title:"More Info"}
+          callToAction: {url: "${websiteURL}", title: "More Info"}
         }){
             id
           }
