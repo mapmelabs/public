@@ -55,11 +55,12 @@ function onFormSubmit(event) {
     Logger.log(body)
     const method = 'post'
     getMapMeApi(method, body)
-if (publishRequired) {
-      console.log('publishing story')
-      const body = publishStoryMapRequest()
-      getMapMeApi(method, body)
-    }    
+ if (publishRequired) {
+        console.log('publishing story in 5s')
+        Utilities.sleep(5000)        
+        const body = publishStoryMapRequest()
+        getMapMeApi(method, body)
+      }    
 }
 /**
  * Create request body
