@@ -100,7 +100,7 @@ function publishStoryMapRequest() {
     var graphql = JSON.stringify({
         query: `
 mutation publishStoryMap {
-  publishStoryMap(storyId: "${storyId}"){storyId, publishId}
+  publishStoryMap(storyId: "${storyId}"){storyId, operationId}
 }
 `,
     })
