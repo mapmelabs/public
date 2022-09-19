@@ -18,7 +18,8 @@ const categoryNameToIdMap = {
 }
 const publishRequired = true
 const publishDelaySec = 5 // enables google geocode to complete prior to publish
-const descHtmlElement = 'p' // html element separating multiple descriptions
+const descFieldsList = ['1st Description Option', '2nd Description Option'] // combined description fields
+const descHtmlElement = 'p' // html element used to enclose description field values
 
 ///////////////////////// no changes expected below, do not modify /////////////////////////
 
@@ -107,49 +108,71 @@ function onFormSubmit(event) {
     let name, address, description, websiteURL
     const allCatIds = Object.values(categoryNameToIdMap)
     let sectCatIds = allCatIds.length === 1 ? [allCatIds[0]] : []
-    const combinedDescription = []
     const throwDescriptionConflict = () => {
         throw new Error(`The 'description' and 'descriptionX' fields cannot be used at the same time`)
     }
+    const descriptionFields = {}
+    const isFragmentedDesc = () => Object.keys(descriptionFields).length > 0
     formResponseItems.forEach(itemResponse => {
         const value = itemResponse.getResponse()
         const fieldTitle = itemResponse.getItem().getTitle()
+        let handled
         switch (fieldTitle) {
             case 'Name':
                 name = value
+                handled = true
                 break
             case 'Address':
                 address = value
+                handled = true
                 break
             case 'Description':
-                if (combinedDescription.length) {
+                if (isFragmentedDesc()) {
                     throwDescriptionConflict()
                 }
                 description = value
+                handled = true
                 break
             case 'Website URL':
                 websiteURL = value
+                handled = true
                 break
             case 'Category':
                 value.forEach(catName => {
                     const catId = categoryNameToIdMap[catName]
                     if (catId) {
                         sectCatIds.push(catId)
+                        handled = true
                     } else {
-                        Logger.log(`error: cannot find category ID for category-name ${catName}`)
+                        throw new Error(`error: cannot find category ID for category-name ${catName}`)
                     }
                 })
                 break
         }
-        if (/^description\d+$/.test(fieldTitle)) {
+        if (!handled && descFieldsList.includes(fieldTitle)) {
             if (description) {
                 throwDescriptionConflict()
             }
-            combinedDescription.push(value)
+            descriptionFields[fieldTitle] = value
+            handled = true
+        }
+        if (!handled) {
+            Logger.log(`unhandled field '${fieldTitle}' value '${value}'`)
         }
     })
-    if (combinedDescription.length) {
-        description = combinedDescription.map(value => `<${descHtmlElement}>${value}</${descHtmlElement}>}`).join('\n')
+    if (isFragmentedDesc()) {
+        description = descFieldsList
+            .map(key => {
+                const value = descriptionFields[key]
+                if (value) {
+                    return value
+                } else {
+                    Logger.log(`warning: combined description field ${key} is declared but unused`)
+                }
+            })
+            .filter(x => x)
+            .map(value => `<${descHtmlElement}>${value}</${descHtmlElement}>}`)
+            .join('\n')
         Logger.log(`combined description:\n${description}`)
     }
     Logger.log(`apiServiceUrl ${apiServiceUrl}`)
