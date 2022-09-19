@@ -108,8 +108,9 @@ function onFormSubmit(event) {
     const allCatIds = Object.values(categoryNameToIdMap)
     let sectCatIds = allCatIds.length === 1 ? [allCatIds[0]] : []
     const combinedDescription = []
-    const throwDescriptionConflict = () =>
+    const throwDescriptionConflict = () => {
         throw new Error(`The 'description' and 'descriptionX' fields cannot be used at the same time`)
+    }
     formResponseItems.forEach(itemResponse => {
         const value = itemResponse.getResponse()
         const fieldTitle = itemResponse.getItem().getTitle()
