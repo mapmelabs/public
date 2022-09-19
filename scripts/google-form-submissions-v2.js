@@ -18,6 +18,7 @@ const categoryNameToIdMap = {
 }
 const publishRequired = true
 const publishDelaySec = 5 // enables google geocode to complete prior to publish
+const descHtmlElement = 'p' // html element separating multiple descriptions
 
 ///////////////////////// no changes expected below, do not modify /////////////////////////
 
@@ -106,24 +107,30 @@ function onFormSubmit(event) {
     let name, address, description, websiteURL
     const allCatIds = Object.values(categoryNameToIdMap)
     let sectCatIds = allCatIds.length === 1 ? [allCatIds[0]] : []
+    const combinedDescription = []
+    const throwDescriptionConflict = () =>
+        throw new Error(`The 'description' and 'descriptionX' fields cannot be used at the same time`)
     formResponseItems.forEach(itemResponse => {
-        const response = itemResponse.getResponse()
-        const title = itemResponse.getItem().getTitle()
-        switch (title) {
+        const value = itemResponse.getResponse()
+        const fieldTitle = itemResponse.getItem().getTitle()
+        switch (fieldTitle) {
             case 'Name':
-                name = response
+                name = value
                 break
             case 'Address':
-                address = response
+                address = value
                 break
             case 'Description':
-                description = response
+                if (combinedDescription.length) {
+                    throwDescriptionConflict()
+                }
+                description = value
                 break
             case 'Website URL':
-                websiteURL = response
+                websiteURL = value
                 break
             case 'Category':
-                response.forEach(catName => {
+                value.forEach(catName => {
                     const catId = categoryNameToIdMap[catName]
                     if (catId) {
                         sectCatIds.push(catId)
@@ -133,8 +140,17 @@ function onFormSubmit(event) {
                 })
                 break
         }
+        if (/^description\d+$/.test(fieldTitle)) {
+            if (description) {
+                throwDescriptionConflict()
+            }
+            combinedDescription.push(value)
+        }
     })
-
+    if (combinedDescription.length) {
+        description = combinedDescription.map(value => `<${descHtmlElement}>${value}</${descHtmlElement}>}`).join('\n')
+        Logger.log(`combined description:\n${description}`)
+    }
     Logger.log(`apiServiceUrl ${apiServiceUrl}`)
     accessTokenGet()
     createSection(createSectionRequestBodyGet(name, address, description, sectCatIds, websiteURL))
