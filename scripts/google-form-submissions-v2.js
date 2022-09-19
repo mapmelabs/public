@@ -24,10 +24,7 @@ const publishDelaySec = 5 // enables google geocode to complete prior to publish
 const createSectionRequestBodyGet = (name, address, description, categoryIds, websiteURL) => {
     const reqBody = {
         sceneId: sceneId,
-        sectionData: {
-            name: name,
-            address: address,
-        },
+        sectionData: {name, address, description},
         categoryIds: categoryIds,
     }
     if (websiteURL) {
