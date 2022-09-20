@@ -18,8 +18,12 @@ const categoryNameToIdMap = {
 }
 const publishRequired = true
 const publishDelaySec = 5 // enables google geocode to complete prior to publish
-const descFieldsList = ['1st Description Option', '2nd Description Option'] // combined description fields
+
+// combined description fields parameters
+const descFieldsList = ['1st Description Option', '2nd Description Option'] // form field names
+const descInsertFieldTitle = true // inject the field title (+colon) as prefix to the description field's value
 const descHtmlElement = 'p' // html element used to enclose description field values
+// end 'combined description fields' parameters
 
 ///////////////////////// no changes expected below, do not modify /////////////////////////
 
@@ -165,7 +169,7 @@ function onFormSubmit(event) {
             .map(key => {
                 const value = descriptionFields[key]
                 if (value) {
-                    return value
+                    return descInsertFieldTitle ? key + ': ' + value : value
                 } else {
                     Logger.log(`warning: combined description field ${key} is declared but unused`)
                 }
