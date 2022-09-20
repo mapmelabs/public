@@ -171,7 +171,7 @@ function onFormSubmit(event) {
                 }
             })
             .filter(x => x)
-            .map(value => `<${descHtmlElement}>${value}</${descHtmlElement}>}`)
+            .map(value => `<${descHtmlElement}>${value}</${descHtmlElement}>`)
             .join('\n')
         Logger.log(`combined description:\n${description}`)
     }
