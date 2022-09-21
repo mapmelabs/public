@@ -20,7 +20,10 @@ const publishRequired = true
 const publishDelaySec = 5 // enables google geocode to complete prior to publish
 
 // combined description fields parameters
-const descFieldsList = ['1st Description Option', '2nd Description Option'] // form field names
+const descFieldsList = [
+    {field: 'formFieldName1', title: 'Description Title 1'},
+    {field: 'formFieldName2', title: 'Description Title 2'},
+] // form field names
 const descInsertFieldTitle = true // inject the field title (+colon) as prefix to the description field's value
 const descHtmlElement = 'p' // html element used to enclose description field values
 // end 'combined description fields' parameters
@@ -115,8 +118,8 @@ function onFormSubmit(event) {
     const throwDescriptionConflict = () => {
         throw new Error(`The 'description' and 'descriptionX' fields cannot be used at the same time`)
     }
-    const descriptionFields = {}
-    const isFragmentedDesc = () => Object.keys(descriptionFields).length > 0
+    const descriptionFieldValues = {}
+    const isCombinedDesc = () => Object.keys(descriptionFieldValues).length > 0
     formResponseItems.forEach(itemResponse => {
         const value = itemResponse.getResponse()
         const fieldTitle = itemResponse.getItem().getTitle()
@@ -131,7 +134,7 @@ function onFormSubmit(event) {
                 handled = true
                 break
             case 'Description':
-                if (isFragmentedDesc()) {
+                if (isCombinedDesc()) {
                     throwDescriptionConflict()
                 }
                 description = value
@@ -153,25 +156,28 @@ function onFormSubmit(event) {
                 })
                 break
         }
-        if (!handled && descFieldsList.includes(fieldTitle)) {
+        if (!handled) {
+            const entry = descFieldsList.find(entry => entry.field === fieldTitle)
             if (description) {
                 throwDescriptionConflict()
             }
-            descriptionFields[fieldTitle] = value
+            descriptionFieldValues[fieldTitle] = descInsertFieldTitle
+                ? (entry.title || entry.key) + ': ' + value
+                : value
             handled = true
         }
         if (!handled) {
             Logger.log(`unhandled field '${fieldTitle}' value '${value}'`)
         }
     })
-    if (isFragmentedDesc()) {
+    if (isCombinedDesc()) {
         description = descFieldsList
-            .map(key => {
-                const value = descriptionFields[key]
+            .map(({field}) => {
+                const value = descriptionFieldValues[field]
                 if (value) {
-                    return descInsertFieldTitle ? key + ': ' + value : value
+                    return value
                 } else {
-                    Logger.log(`warning: combined description field ${key} is declared but unused`)
+                    Logger.log(`warning: combined description field ${field} unused`)
                 }
             })
             .filter(x => x)
