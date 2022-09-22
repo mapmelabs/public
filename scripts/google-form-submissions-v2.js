@@ -157,14 +157,16 @@ function onFormSubmit(event) {
                 break
         }
         if (!handled) {
-            const entry = descFieldsList.find(entry => entry.field === fieldTitle)
             if (description) {
                 throwDescriptionConflict()
             }
-            descriptionFieldValues[fieldTitle] = descInsertFieldTitle
-                ? (entry.title || entry.key) + ': ' + value
-                : value
-            handled = true
+            const entry = descFieldsList.find(entry => entry.field === fieldTitle)
+            if (entry) {
+                descriptionFieldValues[fieldTitle] = descInsertFieldTitle
+                    ? (entry.title || entry.key) + ': ' + value
+                    : value
+                handled = true
+            }
         }
         if (!handled) {
             Logger.log(`unhandled field '${fieldTitle}' value '${value}'`)
