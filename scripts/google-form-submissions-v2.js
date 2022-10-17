@@ -59,7 +59,7 @@ const baseHttpOptsGet = options =>
         options
     )
 
-const apiPostRequest = (relativePath, options, requestDesc) => {
+const apiRequestSend = (relativePath, options, requestDesc) => {
     const url = apiServiceUrl + '/' + relativePath
     Logger.log(`apiRequestSend url ${url}`)
     Logger.log(`apiRequestSend options ${JSON.stringify(options, null, 2)}`)
@@ -78,7 +78,7 @@ const apiPostRequest = (relativePath, options, requestDesc) => {
 
 let sessionToken
 const accessTokenGet = () => {
-    const body = apiPostRequest('auth/key', {headers: {'x-api-key': apiKey}}, 'accessTokenGet')
+    const body = apiRequestSend('auth/key', {headers: {'x-api-key': apiKey}}, 'accessTokenGet')
     Logger.log(`sessionToken: ${body.sessionToken}`)
     sessionToken = body.sessionToken
 }
@@ -88,7 +88,7 @@ const authorizedHeadersGet = () => ({Authorization: `Bearer ${sessionToken}`})
 let createdSectionId
 const createSection = data => {
     Logger.log(`createSection data:\n${JSON.stringify(data, null, 2)}`)
-    const body = apiPostRequest(
+    const body = apiRequestSend(
         'api/sections',
         {
             headers: authorizedHeadersGet(),
@@ -100,10 +100,11 @@ const createSection = data => {
 }
 
 const scenePublish = () => {
-    apiPostRequest(
+    apiRequestSend(
         `api/scenes/${sceneId}`,
         {
             headers: authorizedHeadersGet(),
+            method: 'put',
         },
         'scenePublish'
     )
