@@ -1,34 +1,34 @@
 /**
- * Script parameters
- * API service URL (confirm working against correct stack)
- * API-KEY (generated via Editor, the user generating the key must be owner/member of account)
- * Scene ID
- * categoryNameToIdMap (minimum one entry, if exactly one category exists, it is auth-assigned)
+ * Script parameters:
+ * API key (generated via Editor)
+ * Map ID
+ * Category names and IDs etc
  */
+
 const apiServiceUrl = 'https://api.mapme.com'
 
-const apiKey = '[api key generated in Editor]'
+const apiKey = '[API key]'
 
-const sceneId = '[scene ID]'
+const sceneId = '[map ID]'
 
 const categoryNameToIdMap = {
-    'Category A': 'category A ID',
-    'Category B': 'category B ID',
-    'Category C': 'category C ID',
+    'Category A': 'Category A ID',
+    'Category B': 'Category B ID',
+    'Category C': 'Category C ID',
 }
-const publishRequired = true
-const publishDelaySec = 5 // enables google geocode to complete prior to publish
 
-// combined description fields parameters
+const publishRequired = true
+const publishDelaySec = 5 // delay to resolve address prior publish
+
 const descFieldsList = [
+    // combines description fields
     {field: 'formFieldName1', title: 'Description Title 1'},
     {field: 'formFieldName2', title: 'Description Title 2'},
-] // form field names
-const descInsertFieldTitle = true // inject the field title (+colon) as prefix to the description field's value
-const descHtmlElement = 'p' // html element used to enclose description field values
-// end 'combined description fields' parameters
+]
+const descInsertFieldTitle = true // adds above titles into description
+const descHtmlElement = 'p' // html element to wrap field values
 
-///////////////////////// no changes expected below, do not modify /////////////////////////
+///////////////////////// no change expected below //////////////////////////////
 
 const createSectionRequestBodyGet = (name, address, description, categoryIds, websiteURL) => {
     const reqBody = {
